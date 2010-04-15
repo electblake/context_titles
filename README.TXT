@@ -2,7 +2,7 @@
 
 -- SUMMARY --
 
-Supports adding active theme files to page via context
+Supports changing page and header titles via context
 
 -- REQUIREMENTS --
 
@@ -16,8 +16,7 @@ Supports adding active theme files to page via context
 
 -- CONFIGURATION --
 
-* The module adds a "Add JS" reaction in the Context UI.
-* "Add CSS" reaction in Context UI
+* The module adds a "Titles" reaction in the Context UI.
 
 -- CONTACT --
 
