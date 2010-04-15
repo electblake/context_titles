@@ -1,0 +1,58 @@
+<?php
+// $Id
+//1. Implement `hook_ctools_plugin_api()` in your module. This declares that your
+//  module is API compatible with Context 3.
+
+function context_titles_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && $api == 'plugins') {
+    return array('version' => 3);
+  }
+}
+
+//2. Implement `hook_context_plugins()` to define your plugins, classes, and class
+//  hierarchy.
+
+function context_titles_context_plugins() {
+  $plugins = array();
+  $plugins['context_reaction_titles'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'context_titles') .'/plugins',
+      'file' => 'context_reaction_titles.inc',
+      'class' => 'context_reaction_titles',
+      'parent' => 'context_reaction',
+    ),
+  );
+  return $plugins;
+}
+
+//3. Implement `hook_context_registry()` to define your conditions and/or
+//  reactions and map them to plugins.
+
+function context_titles_context_registry() {
+	$registry = array();
+  $registry['reactions'] = array(
+    'titles' => array(
+      'title' => t('Titles'),
+      'description' => t('titles'),
+      'plugin' => 'context_reaction_titles',
+    )
+  );
+  return $registry;
+}
+
+function context_titles_preprocess_page(&$vars) {
+
+  $contexts = context_active_contexts();
+  $classes = array();
+  foreach ($contexts as $k => $v) {
+    if (!empty($v->reactions['titles']['head_title'])) {
+    	$vars['head_title'] = $v->reactions['titles']['head_title'];
+    }
+		if ($v->reactions['titles']['pagetitle_hide'] == 1) {
+      $vars['title'] = '';
+    }
+    elseif (!empty($v->reactions['titles']['pagetitle'])) {
+	    $vars['title'] = $v->reactions['titles']['pagetitle'];
+    }
+  }
+}
